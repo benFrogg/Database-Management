@@ -19,8 +19,8 @@ import org.apache.hadoop.util.GenericOptionsParser;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
-public class solution2 extends Configured implements Tool{
-	public static class s2map extends Mapper<Object, Text, Text, DoubleWritable> {
+public class MapReduceApplication extends Configured implements Tool{
+	public static class MRmap extends Mapper<Object, Text, Text, DoubleWritable> {
 		@Override
 		public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
 			String [] field = value.toString().split(" ");
@@ -30,7 +30,7 @@ public class solution2 extends Configured implements Tool{
 		}
 	}
 
-	public static class s2reduce extends Reducer<Text, DoubleWritable, Text, DoubleWritable> {
+	public static class MRreduce extends Reducer<Text, DoubleWritable, Text, DoubleWritable> {
 		@Override
 		public void reduce(Text key, Iterable<DoubleWritable> value, Context context) throws IOException, InterruptedException {
 			DoubleWritable avgSpeed = new DoubleWritable();
@@ -53,13 +53,13 @@ public class solution2 extends Configured implements Tool{
 	public int run(String[] args) throws Exception {
 		Configuration conf = new Configuration();
 
-		Job job = Job.getInstance(conf, "s2avg");
+		Job job = Job.getInstance(conf, "MRavg");
 
-		job.setJarByClass(solution2.class);
+		job.setJarByClass(MapReduceApplication.class);
 
-		job.setMapperClass(s2map.class);
+		job.setMapperClass(MRmap.class);
 		
-		job.setReducerClass(s2reduce.class);
+		job.setReducerClass(MRreduce.class);
 
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(DoubleWritable.class);
@@ -72,7 +72,7 @@ public class solution2 extends Configured implements Tool{
 	}
 
 	public static void main(String[] args) throws Exception {
-		int exit = ToolRunner.run(new solution2(), args);
+		int exit = ToolRunner.run(new MapReduceApplication(), args);
 		System.exit(exit);
 	}
 }
