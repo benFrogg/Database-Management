@@ -61,3 +61,12 @@ BEGIN
       LIMIT N, 1
   );
 END
+--
+-- ALTERNATIVELY
+--
+SELECT salary
+FROM (SELECT salary 
+FROM Employee
+ORDER BY salary DESC
+LIMIT 3) AS e
+ORDER BY ASC LIMIT 1;
